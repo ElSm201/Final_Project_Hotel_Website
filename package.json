@@ -1,0 +1,33 @@
+{
+  "name": "final_project_hotel_website",
+  "version": "1.0.0",
+  "description": "Project Name: Hotel application (Fun Name like Project Paradise Hotel Website?)\r Team Members & Their Roles\r Ella Smith - Frontend Development\r Monica Fornaszewski- Frontend Integration & Features\r R’Reeyah Marby-Francis - Backend Development\r Application Functionality: Clearly describe how your application meets each of the project requirements.\r User Accounts & Roles: By having customers and employees use the website, we can have different roles, allowing different actions for reservations.\r Database: Guest reservations will be stored in a database and can be canceled by staff.\r Interactive UI: Our website will be updated dynamically when a room is booked to prevent double booking.\r New Library or Framework: You must use at least one library or framework that was not covered in class.\r Advanced form validation:\r React Hook Form\r Internal REST API: Your project must have an API layer used to store and see retrieve data\r Can use Spring Boot to help create REST API\r Example API’s:\r Reservation service, Payment service, Room service, Account service\r External REST API: Guests will be able to see a page with restaurants in the area and some of their reviews.\r https://serpapi.com/yelp-reviews-api\r https://apify.com/tri_angle/restaurant-review-aggregator\r Allows us to select restaurants nearby and scrape the reviews",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElSm201/Final_Project_Hotel_Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ElSm201/Final_Project_Hotel_Website/issues"
+  },
+  "homepage": "https://github.com/ElSm201/Final_Project_Hotel_Website#readme",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.11",
+    "pg": "^8.16.3",
+    "react-router": "^7.9.6",
+    "react-router-dom": "^7.9.6"
+  }
+}
