@@ -79,7 +79,7 @@ export default function Home(){
         <p>Located near the beach with easy access to restaurants and attractions including an aquarium.</p>
       </div>
 
-      {/* Centered Contact Form that may actually go somewhere eventually*/}
+      {/*Contact Form that may actually go somewhere eventually*/}
       <Box className="contact-form">
         <Box
           component="form"
