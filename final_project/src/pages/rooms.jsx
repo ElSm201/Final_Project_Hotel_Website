@@ -72,15 +72,15 @@ export default function Rooms() {
           component="form"
           onSubmit={handleSubmit}
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'white',
-            p: 4,
-            width: 400,
-            flexDirection: 'column',
-            gap: 2
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'white',
+              border: '2px solid black',
+              boxShadow: 24,
+              p: 4,
           }}
         >
           <h2>{getSelectedName()}</h2>

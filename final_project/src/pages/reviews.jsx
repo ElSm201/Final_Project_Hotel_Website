@@ -12,6 +12,8 @@ export default function Reviews() {
         <li><Link to="/reviews">Restaurants Nearby</Link></li>
         <li><Link to="/login">Employee Login</Link></li>
       </ul>
+      <h1>Resturants Nearby</h1>
+      <p>Hotel is located next to numerous restaurants! Below shows some of the best in the area</p>
     </div>
   );
 }
