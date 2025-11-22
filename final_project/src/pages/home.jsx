@@ -121,7 +121,7 @@ export default function Home(){
               transform: 'translate(-50%, -50%)',
               width: 400,
               bgcolor: 'white',
-              border: '2px solid #000',
+              border: '2px solid black',
               boxShadow: 24,
               p: 4,
             }}
