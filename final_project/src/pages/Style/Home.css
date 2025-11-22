@@ -1,0 +1,47 @@
+/* style/Home.css */
+
+ul {
+  list-style-type: none;      
+  margin: 0;
+  padding: 0;
+  display: flex;              
+  justify-content: flex-start; 
+  background-color: lightblue;      
+  position: fixed;           
+  top: 0;
+  left: 0;
+  width: 100%;                        
+}
+
+li {
+  padding: 14px;          
+}
+
+.navbar {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  background: lightblue;
+  padding: 10px;
+}
+
+.home_img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.home_pictures {
+  width: 900px;
+  height: 500px;
+  border-radius: 8px;
+}
+
+.image-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  margin: 0 10px;
+}
