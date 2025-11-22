@@ -7,7 +7,7 @@ export default function Layout() {
                 <ul>
                     <li>
                         <Link to ="/">Home</Link>
-                        <Link to="/room">Rooms</Link>
+
                     </li>
                     
                 </ul>
