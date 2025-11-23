@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {Box, TextField, Button, FormControl, FormLabel,Modal} from '@mui/material';
 import './style/Home.css';
+import { useForm } from 'react-hook-form';
+
 
 export default function Home(){
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [email, setEmail] = useState('')
-  const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false)
   const [modalEmail, setModalEmail] = useState('');
 
@@ -33,20 +33,23 @@ export default function Home(){
     setCurrentIndex(newIndex)
   };
 
-  const handleSubmit = (e) => { //once database is set up maybe we can add it?
-    console.log('Email:', email)
-    console.log('Comment:', comment)
-    alert('Thank you for your message!')
-    setEmail('')
-    setComment('')
+  const {register, handleSubmit, reset} = useForm();
+
+  const onSubmit = (data) => {
+    alert(`Thank you for your message, ${data.email}`)
+    reset()
+  }
+
+
+
+  const {register: registerModal, handleSubmit: handleSubmitModal, reset: resetModal} = useForm();
+
+  const onSubmitModal = (data) => {
+    alert(`Thanks for joining our email list, ${data.modalEmail}!`);
+    setOpenModal(false);
+    resetModal();
   };
 
-  const handleModalSubmit = (e) => {
-    console.log('Modal Email:', modalEmail)
-    alert(`Thanks for joining our email list, ${modalEmail}!`)
-    setOpenModal(false)
-    setModalEmail('')
-  };
 
   return (
     <div>
@@ -80,73 +83,45 @@ export default function Home(){
       </div>
 
       {/*Contact Form that may actually go somewhere eventually*/}
-      <Box className="contact-form">
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}
-        >
-          <FormControl>
-            <FormLabel>Email</FormLabel>
-            <TextField
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Comment</FormLabel>
-            <TextField
-              multiline
-              rows={4}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              required
-            />
-          </FormControl>
-
-          <Button type="submit" variant="contained"> Submit </Button>
-        </Box>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <TextField label="Email" {...register('email')} required />
+        <TextField label="Comment" {...register('comment')} multiline rows={4} required />
+        <Button type="submit" variant="contained">Submit</Button>
       </Box>
+
 
       {/* Email List Modal */}
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
         <Box
+          component="form"
+          onSubmit={handleSubmitModal(onSubmitModal)}
           sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 400,
-              bgcolor: 'white',
-              border: '2px solid black',
-              boxShadow: 24,
-              p: 4,
-            }}
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'white',
+            border: '2px solid black',
+            boxShadow: 24,
+            p: 4
+          }}
         >
           <h2>Join Our Email List</h2>
-          <form onSubmit={handleModalSubmit}>
-            <TextField
-              type="email"
-              label="Email Address"
-              value={modalEmail}
-              onChange={(e) => setModalEmail(e.target.value)}
-              required
-            />
-            <Button
-              type="submit"
-              variant="contained"
-            >
-              Join
-            </Button>
-          </form>
-          <Button onClick={() => setOpenModal(false)}> Cancel</Button>
-          </Box>
-        </Modal>
-      </div>
-    );
+          <TextField
+            type="email"
+            label="Email Address"
+            {...registerModal('modalEmail')}
+            required
+          />
+          <Button type="submit" variant="contained">Join</Button>
+          <Button onClick={() => setOpenModal(false)} sx={{ ml: 1 }}>Cancel</Button>
+        </Box>
+      </Modal>
+    </div>
+
+
+    )
   }
 /**
  * Add images to home page 
