@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 export default function Home(){
   const [currentIndex, setCurrentIndex] = useState(0);
   const [openModal, setOpenModal] = useState(false)
-  const [modalEmail, setModalEmail] = useState('');
+  //const [modalEmail, setModalEmail] = useState('');
 
   const images = ['/images/beach1.jpg','/images/hotel_inside.jpg', '/images/hotel_outside.jpg','/images/inside_room.jpeg'];
 

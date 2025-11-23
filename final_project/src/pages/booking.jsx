@@ -11,7 +11,6 @@ export default function Booking() {
     e.preventDefault();
     console.log('Name:', name);
     console.log('Email:', email);
-    console.log('Payment:', payment);
     alert('Booking submitted!');
   };
 
@@ -41,12 +40,6 @@ export default function Booking() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required />
-        <TextField
-          label="Payment Info"
-          placeholder="Card Number"
-          value={payment}
-          onChange={(e) => setPayment(e.target.value)}
-          required/>
         <Button type="submit" variant="contained">
           Submit Booking
         </Button>
