@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import {Box, TextField, Button, FormControl, FormLabel,Modal} from '@mui/material';
 import './style/Home.css';
 import { useForm } from 'react-hook-form';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos' // https://mui.com/material-ui/material-icons/?query=arrow
 
 
 export default function Home(){
@@ -40,8 +42,6 @@ export default function Home(){
     reset()
   }
 
-
-
   const {register: registerModal, handleSubmit: handleSubmitModal, reset: resetModal} = useForm();
 
   const onSubmitModal = (data) => {
@@ -49,6 +49,12 @@ export default function Home(){
     setOpenModal(false);
     resetModal();
   };
+
+  const email = register('email', { required: true })
+  const comment= register('comment', { required: true })
+  const modalEmail = registerModal('modalEmail', { required: true })
+
+
 
 
   return (
@@ -62,13 +68,28 @@ export default function Home(){
 
       {/* Home images*/}
       <div className="home_img">
-        <button onClick={prevImage} className="image-btn">‹</button>
+      <Button
+          startIcon={<ArrowBackIosNewIcon />}
+          onClick={prevImage}
+          aria-label="previous"
+        >
+        </Button>
+
+      {/**Button set up from https://stackoverflow.com/questions/61456299/react-using-arrows-in-a-button */}
         <img
           src={images[currentIndex]}
           alt={'Pictures of Hotel'}
           className="home_pictures"
         />
-        <button onClick={nextImage} className="image-btn">›</button>
+        
+        <Button
+          endIcon={<ArrowForwardIosIcon />}
+          onClick={nextImage}
+          aria-label="next"
+        >
+        </Button>
+
+
       </div>
 
       {/* Hotel description */}
@@ -84,9 +105,19 @@ export default function Home(){
 
       {/*Contact Form that may actually go somewhere eventually*/}
       <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField label="Email" {...register('email')} required />
-        <TextField label="Comment" {...register('comment')} multiline rows={4} required />
-        <Button type="submit" variant="contained">Submit</Button>
+        <TextField label="Email" 
+        name ={email.name}
+        onChange = {email.change}
+        inputRef={email.ref}
+        required
+         />
+        <TextField label="Comment"
+        name = {comment.name}
+        onChange = {comment.onChange}
+        inputRef={comment.ref}
+        multiline rows={4} required 
+        />
+        <Button type="submit">Submit</Button>
       </Box>
 
 
@@ -111,11 +142,13 @@ export default function Home(){
           <TextField
             type="email"
             label="Email Address"
-            {...registerModal('modalEmail')}
+            name = {modalEmail.name}
+            onchange = {modalEmail.onChange}
+            inputRef={modalEmail.onChange}
             required
           />
-          <Button type="submit" variant="contained">Join</Button>
-          <Button onClick={() => setOpenModal(false)} sx={{ ml: 1 }}>Cancel</Button>
+          <Button type="submit"onClick={() => setOpenModal(false)} variant='contained'>Join</Button>
+          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
         </Box>
       </Modal>
     </div>

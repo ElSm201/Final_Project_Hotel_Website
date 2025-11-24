@@ -1,27 +1,33 @@
 import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { Box, TextField, Button, FormControl, FormLabel} from '@mui/material'
+import {useForm} from 'react-hook-form'
 
 export default function Login() {
-  const [userName, setUserName] = useState('')
-  const [password, setPassword] = useState('')
+  //const [userName, setUserName] = useState('')
+  //const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [redirect, setRedirect] = useState(false)
 
-  const handleSubmit = (e) => {
+  const {register, handleSubmit} = useForm()
 
-    // Rough verification logic will be better one database is built
-    if(userName === 'admin' && password === '1234'){
-      setRedirect(true); 
-    }else{
-      setError('Invalid username or password');
+  const onSubmit = (data) => {
+    setError('')
+
+    if (data.userName === 'admin' && data.password === '1234') {
+      setRedirect(true)
+      return
     }
-  };
 
-  // If the username and password is correct move to employee only page
-  if(redirect){
-    return <Navigate to="/employees" />;
+    setError('Invalid username or password')
   }
+
+
+  if (redirect) {
+    return <Navigate to="/employees" />
+  }
+  const userName = register('userName', { required: 'User Name is required' })
+  const password = register('password', { required: 'Password is required' })
 
   return(
     <div>
@@ -35,24 +41,26 @@ export default function Login() {
         </div>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         sx={{ display: 'flex', flexDirection: 'column'}}
       >
         <FormControl>
           <FormLabel>User Name</FormLabel>
           <TextField
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            required/>
+            label = "userName"
+            name = {userName.name}
+            onChange = {userName.onChange}
+            inputRef = {userName.ref}
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Password</FormLabel>
           <TextField
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            label = "password"
+            name = {password.name}
+            onChange = {password.onChange}
+            inputRef = {password.ref}
           />
         </FormControl>
         <Button type="submit" variant="contained">
