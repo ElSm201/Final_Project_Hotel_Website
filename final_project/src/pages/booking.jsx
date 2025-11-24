@@ -8,7 +8,6 @@ export default function Booking() {
   const [payment, setPayment] = useState('');
 
   const handleSubmit = (e) => { //nothing is really gonna happen for now
-    e.preventDefault();
     console.log('Name:', name);
     console.log('Email:', email);
     alert('Booking submitted!');
