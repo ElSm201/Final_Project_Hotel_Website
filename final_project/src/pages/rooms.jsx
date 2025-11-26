@@ -102,8 +102,8 @@ export default function Rooms({setBookingSettings}) {
             onChange={(e) => setCheckOut(e.target.value)}
             required/>
           <Link to="/booking"  onClick={() => setBookingSettings({
-                  roomType: selectedRoom && selectedRoom.name,
-                  roomPrice: selectedRoom && selectedRoom.price,
+                  roomType: selectedRoom.name,
+                  roomPrice: selectedRoom.price,
                   travelDates: { checkIn, checkOut }
             })}>  
           <Button type="submit" variant="contained">
