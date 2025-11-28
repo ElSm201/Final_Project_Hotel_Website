@@ -7,25 +7,26 @@ export default function Login() {
   //const [userName, setUserName] = useState('')
   //const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [redirect, setRedirect] = useState(false)
-
+  const [redirect, setRedirect] = useState(false);
   const {register, handleSubmit} = useForm()
 
-  const onSubmit = (data) => {
+ const onSubmit = (data) => {
     setError('')
 
     if (data.userName === 'admin' && data.password === '1234') {
-      setRedirect(true)
-      return
-    }
-
+      setRedirect(true) //use Navigate here, but we don't always 
+      //want to navigate, only on successful login rather than using Link
+    }else{
+    alert('Please check your username and password and try again.')
     setError('Invalid username or password')
+    }
   }
-
 
   if (redirect) {
-    return <Navigate to="/employees" />
+    return <Navigate to="/employees" /> //use Navigate here, but we don't always 
+      //want to navigate, only on successful login rather than using Link
   }
+
   const userName = register('userName', { required: 'User Name is required' })
   const password = register('password', { required: 'Password is required' })
 
