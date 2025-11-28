@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Box, TextField, Button } from '@mui/material'
-import { Navigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './Style/Room.css'
 
 export default function Rooms({setBookingSettings}) {
@@ -20,9 +20,11 @@ export default function Rooms({setBookingSettings}) {
 
   const [roomType, setRoomType] = useState('');
   const [roomPrice, setRoomPrice] = useState('');
-  const [travelDates, setTravelDates] = useState({checkIn: '', checkOut: ''}); //RIP  I realized I didn't validate dates, so you can book in the past
+  const [travelDates, setTravelDates] = useState({checkIn: '', checkOut: ''}); //Validation is hopefully fixed :)
 
-  
+
+
+
   const handleOpen = (room) => {
     setSelectedRoom(room)
     setOpen(true)
@@ -37,6 +39,7 @@ export default function Rooms({setBookingSettings}) {
 
   const handleSubmit = (e) => {
     // Save info so Booking page can read it
+  
    setRoomType(selectedRoom.name)
    setRoomPrice(selectedRoom.price)
    setTravelDates({checkIn: checkIn, checkOut: checkOut})
@@ -101,11 +104,20 @@ export default function Rooms({setBookingSettings}) {
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
             required/>
-          <Link to="/booking"  onClick={() => setBookingSettings({
+          <Link to="/booking"  onClick={() => {
+          const today = new Date()
+          const checkInDate = new Date(checkIn)
+          const checkOutDate = new Date(checkOut)
+          if(checkInDate < today || checkOutDate <= checkInDate){
+            alert('Please select valid check-in and check-out dates.')
+            e.preventDefault(); // stop navigation to booking https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
+            return 
+          } 
+          setBookingSettings({
                   roomType: selectedRoom.name,
                   roomPrice: selectedRoom.price,
                   travelDates: { checkIn, checkOut }
-            })}>  
+            })}}>  
           <Button type="submit" variant="contained">
             Continue Booking
           </Button>

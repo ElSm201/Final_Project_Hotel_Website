@@ -15,10 +15,14 @@ export default function Booking({bookingSettings}) {
     alert('Booking submitted!');
   };
 //how to do math with dates in java script? https://medium.com/@selbekk/math-with-dates-in-javascript-2b0ddcee63f
-const checkInDate = new Date(checkIn);
-const checkOutDate = new Date(checkOut);
-const timeDifference = checkOutDate.getTime() - checkInDate.getTime();
-//and then to convert to days and multiple by price
+const checkInDate = new Date(checkIn)
+const checkOutDate = new Date(checkOut)
+const timeDifference = checkOutDate.getTime() - checkInDate.getTime()
+//and then to convert to days from miliseconds https://gist.github.com/flangofas/714f401b63a1c3d84aaa
+const daysDifference = timeDifference / (1000 * 60 * 60 * 24)
+//get the price by removing the dollar sign and /night from roomPrice https://www.w3schools.com/jsref/jsref_replace.asp
+const pricePerNight = parseInt(roomPrice.replace('$','').replace('/night','')) //use replace to get rid of dollar sign and /night
+const totalPrice = pricePerNight * daysDifference
 
   const customerName = register('Customer Name', { required: 'Customer Name is required' })
   const customerEmail = register('Customer Email', { required: 'Customer Email is required' })
@@ -37,6 +41,7 @@ const timeDifference = checkOutDate.getTime() - checkInDate.getTime();
       <h3>Room Type: {roomType}</h3>
       <h3>Room Price: {roomPrice}</h3>
       <h3>Travel Dates: {checkIn} to {checkOut}</h3>
+      <h3>Total Price: ${totalPrice}</h3>
   
       <Box
         component="form"
