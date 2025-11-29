@@ -22,7 +22,13 @@ const guestRoutes = (app) => {
     try{
         let{name, email, type,check_in, check_out} = req.body; //have to get the guest_id
         //getting the specified type of room requested
-        let room_query = `select room_num From ${room} where type = $1 `
+        let room_query = `Select room_num 
+                            FROM ${room} r
+                            WHERE r.type = $1
+                            AND r.room_num NOT IN (
+                                SELECT room_id FROM ${reserve}
+                                WHERE ($2 < check_out AND $3 > check_in)
+                            ) `
         const {rows: roomRows} = await query(room_query,[type])
         if(rows.length === 0){
             throw new Error("no rooms of that type")
@@ -63,13 +69,15 @@ const guestRoutes = (app) => {
    */
    app.get('/api/availability', async(req,res) =>{
         try{
-            let {type, check_in, check_out} = req.body
-            const available =  `
-                                Select * 
-                                From ${room} ro join ${reserve} res on ro.room_num = res.room_id
-                                And( res.check_in < $3 and res.check_out > $2)
-                                where ro.type = $1 
-                                `
+            let {type, check_in, check_out} = req.query
+            const available =  ` SELECT * 
+                                FROM ${room} r
+                                WHERE r.type = $1
+                                AND r.room_num NOT IN (
+                                    SELECT room_id 
+                                    FROM ${reserve} 
+                                    WHERE ($2 < check_out AND $3 > check_in)
+                                )`
             const {rows} = await query(available, [type, check_in, check_out])
             if(rows.length === 0){
                 return res.status(404).json({error: 'No available rooms'})
