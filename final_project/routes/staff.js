@@ -35,7 +35,7 @@ app.get('/api/reservation', async(req,res)=>{
 })
 //retrieve reservation by guest name
 //GET - /reservation?search=[query]
-app.get('/api/search', async(req,res) => {
+app.get('/api/reservation/search', async(req,res) => {
     const searchQuery = req.query.searchQuery
     if(!searchQuery){
         return res.status(400).json({error: 'Execution error'})
