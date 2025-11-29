@@ -8,7 +8,7 @@ const admin = 'staff'
 const staffRoutes = (app)=>{
 
 //adding a staff memeber credential to employee table
-app.post('/api/login', async(req,res)=>{
+app.post('/api/staff', async(req,res)=>{
     try{
         let {name, username, password} = req.body;
         const qs = `Insert into ${admin} (name, position, salary, working, username, password) 
@@ -35,7 +35,7 @@ app.get('/api/reservation', async(req,res)=>{
 })
 //retrieve reservation by guest name
 //GET - /reservation?search=[query]
-app.get('/api/search', async(req,res) => {
+app.get('/api/reservation/search', async(req,res) => {
     const searchQuery = req.query.searchQuery
     if(!searchQuery){
         return res.status(400).json({error: 'Execution error'})
@@ -47,7 +47,7 @@ app.get('/api/search', async(req,res) => {
 
         const {rows} = await query(qs, [`%${searchQuery}%`])
         if(rows.length ===0){
-            return res.status(404).json({ error: 'No film found' })
+            return res.status(404).json({ error: 'No reservation found' })
         }
         res.json(rows)
     }catch(err){
