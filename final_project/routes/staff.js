@@ -8,7 +8,7 @@ const admin = 'staff'
 const staffRoutes = (app)=>{
 
 //adding a staff memeber credential to employee table
-app.Post('/api/login', async(req,res)=>{
+app.post('/api/login', async(req,res)=>{
     try{
         let {name, username, password} = req.body;
         const qs = `Insert into ${admin} (name, position, salary, working, username, password) 
