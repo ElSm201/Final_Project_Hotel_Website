@@ -3,9 +3,9 @@
 
 Project Name: Hotel application (Fun Name like Project Paradise Hotel Website?)
 ## Team Members & Their Roles
-Ella Smith - Frontend Development
-Monica Fornaszewski- Frontend Integration & Features
-R’Reeyah Marby-Francis - Backend Development
+-**Ella Smith** - Frontend Development
+-**Monica Fornaszewski**- Frontend Integration & Features
+-**R’Reeyah Marby-Francis** - Backend Development
 ## Application Functionality: 
 User Accounts & Roles: By having customers and employees use the website, we can have different roles, allowing different actions for reservations.
 ## Database: 
