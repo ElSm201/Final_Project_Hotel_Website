@@ -1,27 +1,24 @@
 # Final_Project_Hotel_Website
+ ---
+Project Name: Hotel application 
 
-
-Project Name: Hotel application (Fun Name like Project Paradise Hotel Website?)
-# Team Members & Their Roles
-Ella Smith - Frontend Development
-Monica Fornaszewski- Frontend Integration & Features
-R’Reeyah Marby-Francis - Backend Development
-# Application Functionality: 
+## Team Members & Their Roles
+-**Ella Smith** - Frontend Development
+-**Monica Fornaszewski**- Frontend Integration & Features
+-**R’Reeyah Marby-Francis** - Backend Development
+## Application Functionality: 
 User Accounts & Roles: By having customers and employees use the website, we can have different roles, allowing different actions for reservations.
 # Database: 
 Guest reservations will be stored in a database and can be canceled by staff.
 # Interactive UI:
 Our website will be updated dynamically when a room is booked to prevent double booking.
 # New Library or Framework: 
-React Hook Form
+React Hook Form is used with modals to help minimize re-rendering while working with MUI. 
 # Internal REST API:
 Can use Spring Boot to help create REST API
 Example API’s:
 Reservation service, Payment service, Room service, Account service
-# External REST API: Guests will be able to see a page with restaurants in the area and some of their reviews.
-https://serpapi.com/yelp-reviews-api
-https://apify.com/tri_angle/restaurant-review-aggregator
-Allows us to select restaurants nearby and scrape the reviews
+# External REST API: 
 
 
 # User Story / Use Case: Explain what happens when a user visits your application and what features they can interact with.
@@ -45,7 +42,13 @@ MUI will also be used to help with the visuals of the website
 
 
 # Set up 
-# Download
+
+## Download
+npm install react-router-dom @mui/material @mui/icons-material react-hook-form
+
+### images source
+rooms - [https://www.marriott.com/en-us/hotels/tpays-springhill-suites-clearwater-beach/overview/]
+home page - [https://www.peakpx.com/en/hd-wallpaper-desktop-euzxf], [https://www.agoda.com/holiday-inn-sarasota-lido-beach-at-the-beach/hotel/sarasota-fl-us.html?ds=InUEYK0q5iX6DMuG], [https://reserving.com/hotels/america/united-states/florida/sarasota/sarasota/lido-beach-resort], [https://www.opalcollection.com/zota/stay/]
 
 
 
