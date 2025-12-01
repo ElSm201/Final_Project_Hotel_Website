@@ -13,6 +13,14 @@ app.set('port', 3000)
 app.use(express.json())
 app.use(cors())
 
+app.get('/', (_req, res) => {
+    res.send('Hotel Application')
+})
+
+app.get('/up', (_req, res) => {
+    res.json({status: 'up'})
+})
+
 //connection to routes
 staffRoutes(app)
 guestRoutes(app)

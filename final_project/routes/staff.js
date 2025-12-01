@@ -26,7 +26,7 @@ app.get('/api/reservation', async(req,res)=>{
     try{
         const getAll = `Select c.name, res.room_id, res.status, res.check_in, res.check_out 
                     From ${reserve} res join ${contact} c 
-                    Where res.guest_id = c.guest_id`
+                    On res.guest_id = c.guest_id`
         const {rows} = await query(getAll)
         res.json(rows)
     }catch(err){
