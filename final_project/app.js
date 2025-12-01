@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
-import { staffRoutes } from "./routes/staff.js"
-import { guestRoutes } from "./routes/guest.js"
+import staffRoutes from "./routes/staff.js"
+import guestRoutes from "./routes/guest.js"
 import { query } from './db/postgres.js'
 
 // create the app
