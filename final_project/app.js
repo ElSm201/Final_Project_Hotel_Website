@@ -4,7 +4,7 @@ import 'dotenv/config'
 import staffRoutes from "./routes/staff.js"
 import guestRoutes from "./routes/guest.js"
 import { query } from './db/postgres.js'
-
+import bcrypt from 'bcrypt'
 // create the app
 const app = express()
 // set the port
