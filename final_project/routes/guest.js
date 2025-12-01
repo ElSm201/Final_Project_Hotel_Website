@@ -1,5 +1,5 @@
 //contain the routes that handle guest input
-import { query } from "../db/client.js"
+import { query } from "../db/postgres.js"
 /**
  * storing tablenames for better code flow
  * conatct: stores the contact information associated with the guest, retrieved at front end
