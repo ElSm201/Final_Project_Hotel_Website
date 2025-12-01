@@ -33,11 +33,13 @@ const guestRoutes = (app) => {
                                 WHERE ($2::timestamptz < check_out AND $3::timestamptz > check_in)
                             ) `
         const {rows: roomRows} = await query(room_query,[type,checkInISO, checkOutISO])
+        console.log(roomRows)
         if(roomRows.length === 0){
             throw new Error("no rooms of that type")
         }
         //picking a random room from the list to assign to the guest upon making reservation
         const randRow = roomRows[Math.floor(Math.random() * roomRows.length)]
+        const roomId = Number(randRow.room_num)
         /**if a guest is already in the system we grab the assigned guest id and reuse it. Else we add the guest
         * we add guest to guest_info, get the assigned guest id and use that for reservation
         */
@@ -45,22 +47,22 @@ const guestRoutes = (app) => {
         let reserve_query = `
             With guest As(
                 Insert into ${contact} (name,email)
-                select $1,$2
+                select $1,$2::varchar
                 where not exists(
-                    select 1 from ${contact} where email=$2
+                    select 1 from ${contact} where email=$2::varchar
                 )
                 returning guest_id
             ),   
             final_guest As(
                 select guest_id from guest
                 union
-                select guest_id from ${contact} where email = $2
+                select guest_id from ${contact} where email = $2::varchar
             )
             Insert into ${reserve}(guest_id ,room_id, status, check_in, check_out)
             select guest_id, $3,'confirmed',$4,$5
             from final_guest
             `
-        const done = await query(reserve_query,[name,email,randRow.room_num,checkInISO, checkOutISO])
+        const done = await query(reserve_query,[name,email,roomId,checkInISO, checkOutISO])
         res.status(201).json({ message: "Booking confirmed", room: randRow.room_num });
     }catch(err){
         res.status(500).json({error: 'internal server error'})
