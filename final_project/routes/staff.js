@@ -44,6 +44,7 @@ app.get('/api/reservation/search', async(req,res) => {
     try{
         let qs = `Select * 
                 From  ${reserve} r join ${contact} c
+                On r.guest_id = c.guest_id
                 Where c.name ILIKE $1 `
 
         const {rows} = await query(qs, [`%${searchQuery}%`])
