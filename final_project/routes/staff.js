@@ -1,5 +1,5 @@
 //handles staff operations and task
-import { query } from "../db/client.js"
+import { query } from "../db/postgres.js"
 
 const contact = 'guest_info'
 const reserve = 'reservation'
