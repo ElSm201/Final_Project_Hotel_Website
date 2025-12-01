@@ -18,7 +18,7 @@ const guestRoutes = (app) => {
      * routes purpose is to establishing which rooms are available that match the type indicated 
      * by the user and will asigned a room to the user from those available(which is a reservation update)
     */
-   app.Post('/api/booking', async(req,res)=> {
+   app.post('/api/booking', async(req,res)=> {
     try{
         let{name, email, type,check_in, check_out} = req.body; //have to get the guest_id
         //getting the specified type of room requested
