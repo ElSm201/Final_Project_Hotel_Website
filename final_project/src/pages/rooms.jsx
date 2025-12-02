@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { Modal, Box, TextField, Button } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 import './Style/Room.css'
+import { checkAvailability } from '../api/reservationApi';
 
 export default function Rooms({setBookingSettings}) {
   const [open, setOpen] = useState(false)
   const [selectedRoom, setSelectedRoom] = useState(null)
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
- 
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const rooms = [
     {id: 1, name: 'Ocean View', img: '/images/room1.avif', description: 'Enjoy a beautiful view of the ocean from your room.', price: '$250/night'},
@@ -18,10 +20,7 @@ export default function Rooms({setBookingSettings}) {
     {id: 5, name: 'Family Suite', img: '/images/room5.webp', description: 'A large suite perfect for families, with multiple beds and a living area.', price: '$350/night'},
   ];
 
-  const [roomType, setRoomType] = useState('');
-  const [roomPrice, setRoomPrice] = useState('');
-  const [travelDates, setTravelDates] = useState({checkIn: '', checkOut: ''}); //Validation is hopefully fixed :)
-
+  
 
 
 
@@ -35,16 +34,57 @@ export default function Rooms({setBookingSettings}) {
     setSelectedRoom(null)
     setCheckIn('')
     setCheckOut('')
+    setLoading(false)
   };
 
-  const handleSubmit = (e) => {
-    // Save info so Booking page can read it
-  
-   setRoomType(selectedRoom.name)
-   setRoomPrice(selectedRoom.price)
-   setTravelDates({checkIn: checkIn, checkOut: checkOut})
-    //setRedirect(true)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Basic date validation
+    const today = new Date();
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    
+    if (checkInDate < today) {
+      alert('Check-in date cannot be in the past.');
+      return;
+    }
+    
+    if (checkOutDate <= checkInDate) {
+      alert('Check-out date must be after check-in date.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Check availability with the API
+      const availability = await checkAvailability({
+        roomType: selectedRoom.name,
+        checkIn: checkIn,
+        checkOut: checkOut
+      });
+
+      if (availability.available) {
+        // Room is available - save booking settings and navigate to booking page
+        setBookingSettings({
+          roomType: selectedRoom.name,
+          roomPrice: selectedRoom.price,
+          travelDates: { checkIn, checkOut },
+          roomId: selectedRoom.id
+        });
+        handleClose(); 
+        navigate('/booking'); // Navigate to booking page
+      } else {
+        alert('Sorry, this room is not available for the selected dates. Please choose different dates or another room.');
+      }
+    } catch (error) {
+      console.error('Availability check failed:', error);
+      alert('Error checking availability. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getSelectedName = () => {
   if(selectedRoom){
@@ -96,33 +136,32 @@ export default function Rooms({setBookingSettings}) {
             label="Check-in Date"
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
-            required/>
+            required
+            disabled={loading}
+            />
 
           <TextField
             type="date"
             label="Check-out Date"
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
-            required/>
-          <Link to="/booking"  onClick={() => {
-          const today = new Date()
-          const checkInDate = new Date(checkIn)
-          const checkOutDate = new Date(checkOut)
-          if(checkInDate < today || checkOutDate <= checkInDate){
-            alert('Please select valid check-in and check-out dates.')
-            e.preventDefault(); // stop navigation to booking https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
-            return 
-          } 
-          setBookingSettings({
-                  roomType: selectedRoom.name,
-                  roomPrice: selectedRoom.price,
-                  travelDates: { checkIn, checkOut }
-            })}}>  
-          <Button type="submit" variant="contained">
-            Continue Booking
+            required
+            disabled={loading}
+            />
+          <Button 
+            type="submit" 
+            variant="contained" 
+            disabled={loading}
+          >
+            {loading ? 'Checking Availability...' : 'Continue Booking'}
           </Button>
-          </Link>
-          <Button onClick={handleClose}>Cancel</Button>
+          
+          <Button 
+            onClick={handleClose} 
+            disabled={loading}
+          >
+            Cancel
+          </Button>
         </Box>
       </Modal>
     </div>
