@@ -5,7 +5,7 @@ import './style/Home.css';
 import { useForm } from 'react-hook-form';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'//need to add install to the readme
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos' // https://mui.com/material-ui/material-icons/?query=arrow
-
+import Weather from '../components/Weather';
 
 export default function Home(){
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -120,7 +120,8 @@ export default function Home(){
         <Button type="submit">Submit</Button>
       </Box>
 
-
+      <Weather />
+      
       {/* Email List Modal */}
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
         <Box
