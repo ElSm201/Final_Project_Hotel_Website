@@ -1,18 +1,38 @@
 import React, {useState} from 'react'
 import {Box,TextField,Button} from '@mui/material';
-import {Link } from 'react-router-dom'
+import {Link, useNavigate } from 'react-router-dom'
 import {useForm} from 'react-hook-form'
+import { createReservation } from '../api/reservationApi';
 
 export default function Booking({bookingSettings}) {
  
-  const { roomType, roomPrice, travelDates } = bookingSettings;
+  const { roomType, roomPrice, travelDates, roomId } = bookingSettings;
   const { checkIn, checkOut } = travelDates;
   const {register, handleSubmit} = useForm()
+  const navigate = useNavigate();
    
 
-  const onSubmit = (e) => { //nothing is really gonna happen for now
-    console.log(e)
-    alert('Booking submitted!');
+  const onSubmit = async (formData) => {
+    try {
+      const reservationPayload = {
+        name: formData.name,        
+        email: formData.email,       
+        type: roomType,             
+        check_in: checkIn,          
+        check_out: checkOut,   
+        phone: formData.phone,
+        room_id: roomId,
+        total_price: totalPrice,
+        status: 'confirmed',     
+      };
+
+      await createReservation(reservationPayload);
+      alert('Booking confirmed!');
+      navigate('/');
+      
+    } catch (error) {
+      alert(error.message || 'Booking failed. Please try again.');
+    }
   };
 //how to do math with dates in java script? https://medium.com/@selbekk/math-with-dates-in-javascript-2b0ddcee63f
 const checkInDate = new Date(checkIn)
