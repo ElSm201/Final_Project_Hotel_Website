@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-import { Modal, Box, TextField, Button } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Modal, Box, TextField, Button, FormLabel, FormControl } from '@mui/material'
+import {Navigate, Link } from 'react-router-dom'
 import './Style/Room.css'
+import { useForm } from 'react-hook-form';
 
 export default function Rooms({setBookingSettings}) {
   const [open, setOpen] = useState(false)
   const [selectedRoom, setSelectedRoom] = useState(null)
-  const [checkIn, setCheckIn] = useState('')
-  const [checkOut, setCheckOut] = useState('')
+  const [redirect, setRedirect] = useState(false);
+
  
+
+  const { register, handleSubmit } = useForm();
 
   const rooms = [
     {id: 1, name: 'Ocean View', img: '/images/room1.avif', description: 'Enjoy a beautiful view of the ocean from your room.', price: '$250/night'},
@@ -18,47 +21,57 @@ export default function Rooms({setBookingSettings}) {
     {id: 5, name: 'Family Suite', img: '/images/room5.webp', description: 'A large suite perfect for families, with multiple beds and a living area.', price: '$350/night'},
   ];
 
-  const [roomType, setRoomType] = useState('');
-  const [roomPrice, setRoomPrice] = useState('');
-  const [travelDates, setTravelDates] = useState({checkIn: '', checkOut: ''}); //Validation is hopefully fixed :)
+    const onSubmit = (data) => {
+      const today = new Date()
+      const checkInDate = new Date(data.checkIn)
+      const checkOutDate = new Date(data.checkOut)
 
+      if(checkInDate < today || checkOutDate <= checkInDate){ //check that date is not in the past and check-out is after check-in
+        alert('Please select valid check-in and check-out dates.')
+        return
+      }
 
+      setBookingSettings({
+        roomType: selectedRoom.name,
+        roomPrice: selectedRoom.price,
+        travelDates: { checkIn: data.checkIn, checkOut: data.checkOut },
+     })
 
-
-  const handleOpen = (room) => {
-    setSelectedRoom(room)
-    setOpen(true)
-  };
-
-  const handleClose = () => {
-    setOpen(false)
-    setSelectedRoom(null)
-    setCheckIn('')
-    setCheckOut('')
-  };
-
-  const handleSubmit = (e) => {
-    // Save info so Booking page can read it
-  
-   setRoomType(selectedRoom.name)
-   setRoomPrice(selectedRoom.price)
-   setTravelDates({checkIn: checkIn, checkOut: checkOut})
-    //setRedirect(true)
-  }
-
-  const getSelectedName = () => {
-  if(selectedRoom){
-    return selectedRoom.name
+      setOpen(false)
+      setRedirect(true) 
     }
-      return "error"
-  }
+
+    if(redirect){
+    return <Navigate to="/booking" />//Navigate to booking page
+    }
+
+
+
+    const handleOpen = (room) => {
+      setSelectedRoom(room)
+      setOpen(true)
+    };
+
+    const handleClose = () => {
+      setOpen(false)
+      setSelectedRoom(null)
+      setCheckIn('')
+      setCheckOut('')
+    };
+
+
+    const getSelectedName = () => {
+    if(selectedRoom){
+      return selectedRoom.name
+      }
+        return "error"
+    }
 
   return (
     <div className="rooms-page">
       <ul className="navbar">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/rooms">Book a Room</Link></li>
-        <li><Link to="/reviews">Restaurants Nearby</Link></li>
         <li><Link to="/login">Employee Login</Link></li>
       </ul>
       <h1>Available Rooms</h1>
@@ -76,13 +89,16 @@ export default function Rooms({setBookingSettings}) {
       <Modal open={open} onClose={handleClose}>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
+
           sx={{
               position: 'absolute',
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 400,
+              flexDirection: 'column',
+              gap: 2,
               bgcolor: 'white',
               border: '2px solid black',
               boxShadow: 24,
@@ -90,38 +106,19 @@ export default function Rooms({setBookingSettings}) {
           }}
         >
           <h2>{getSelectedName()}</h2>
+          <h3>Choose Your Travel Dates</h3>
+          <FormControl>
+            <FormLabel>Check-In Date</FormLabel>
+          <TextField type="date" {...register("checkIn", { required: true })} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Check-Out Date</FormLabel>
+          <TextField type="date" {...register("checkOut", { required: true })} />
+          </FormControl>
 
-          <TextField
-            type="date"
-            label="Check-in Date"
-            value={checkIn}
-            onChange={(e) => setCheckIn(e.target.value)}
-            required/>
-
-          <TextField
-            type="date"
-            label="Check-out Date"
-            value={checkOut}
-            onChange={(e) => setCheckOut(e.target.value)}
-            required/>
-          <Link to="/booking"  onClick={() => {
-          const today = new Date()
-          const checkInDate = new Date(checkIn)
-          const checkOutDate = new Date(checkOut)
-          if(checkInDate < today || checkOutDate <= checkInDate){
-            alert('Please select valid check-in and check-out dates.')
-            e.preventDefault(); // stop navigation to booking https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
-            return 
-          } 
-          setBookingSettings({
-                  roomType: selectedRoom.name,
-                  roomPrice: selectedRoom.price,
-                  travelDates: { checkIn, checkOut }
-            })}}>  
           <Button type="submit" variant="contained">
             Continue Booking
           </Button>
-          </Link>
           <Button onClick={handleClose}>Cancel</Button>
         </Box>
       </Modal>

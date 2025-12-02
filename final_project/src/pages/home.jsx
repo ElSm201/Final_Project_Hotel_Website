@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import {Box, TextField, Button, FormControl, FormLabel,Modal} from '@mui/material';
+import {Box, TextField, Button, FormLabel, FormControl} from '@mui/material';
 import './style/Home.css';
 import { useForm } from 'react-hook-form';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'//need to add install to the readme
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos' // https://mui.com/material-ui/material-icons/?query=arrow
 
-
+//make it so email doesnt pop up again if user closes it
 export default function Home(){
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [openModal, setOpenModal] = useState(false)
-  //const [modalEmail, setModalEmail] = useState('');
-
-  const images = ['/images/beach1.jpg','/images/hotel_inside.jpg', '/images/hotel_outside.jpg','/images/inside_room.jpeg'];
-
+  const [currentIndex, setCurrentIndex] = useState(0)
  
-  useEffect(() => {
-    setOpenModal(true) // so the modal opens right when the page loads
-  }, []);
+
+  const images = ['/images/beach1.jpg','/images/hotel_inside.jpg', '/images/hotel_outside.jpg','/images/inside_room.jpeg'];// all images sources are listed in the readme
 
   const nextImage = () => { //maybe I can change this later for pic to cycle automatically
     let newIndex = currentIndex + 1
@@ -38,21 +32,11 @@ export default function Home(){
   const {register, handleSubmit, reset} = useForm();
 
   const onSubmit = (data) => {
-    alert(`Thank you for your message, ${data.email}`)
+    alert(`Thank you for your message, ${data.email}, we will get back to you soon!`);
     reset()
   }
 
-  const {register: registerModal, handleSubmit: handleSubmitModal, reset: resetModal} = useForm();
-
-  const onSubmitModal = (data) => {
-    alert(`Thanks for joining our email list, ${data.modalEmail}!`);
-    setOpenModal(false);
-    resetModal();
-  };
-
-  const email = register('email', { required: true })
-  const comment= register('comment', { required: true })
-  const modalEmail = registerModal('modalEmail', { required: true })
+  
 
 
 
@@ -62,7 +46,6 @@ export default function Home(){
       <ul className="navbar">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/rooms">Book a Room</Link></li>
-        <li><Link to="/reviews">Restaurants Nearby</Link></li>
         <li><Link to="/login">Employee Login</Link></li>
       </ul>
 
@@ -85,8 +68,9 @@ export default function Home(){
         <Button
           endIcon={<ArrowForwardIosIcon />}
           onClick={nextImage}
-          aria-label="next"
+          aria-label="next" 
         >
+          {/** Basically the alta label from understanding https://www.aditus.io/aria/aria-label/ **/}
         </Button>
 
 
@@ -100,57 +84,35 @@ export default function Home(){
           there's something for everyone!
         </p>
         <h3>More about location</h3>
-        <p>Located near the beach with easy access to restaurants and attractions including an aquarium.</p>
+        <p>Located near the beach with easy access to restaurants and attractions including an aquarium. Spend weekend getaway at the pool, 
+          or explore the vibrant local culture just minutes away from our doorstep. Enjoy boating or fishing trips with the local marina.
+          We also offer shuttle service to and from the airport for your convenience.
+        </p>
       </div>
-
+    <h3>Contact Us!</h3>
       {/*Contact Form that may actually go somewhere eventually*/}
+
+
       <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField label="Email" 
-        name ={email.name}
-        onChange = {email.change}
-        inputRef={email.ref}
-        required
+        <FormControl>
+          {/**https://stackoverflow.com/questions/64938484/using-material-ui-for-creating-an-inline-form-with-label-text-select-and-button */}
+          <FormLabel>Email Address</FormLabel>
+          <TextField label="Email" 
+        {...register('email', { required: true })}
          />
+         </FormControl>
+        <FormControl>
+          <FormLabel>Message</FormLabel>
         <TextField label="Comment"
-        name = {comment.name}
-        onChange = {comment.onChange}
-        inputRef={comment.ref}
-        multiline rows={4} required 
+        {...register('comment', { required: true })}
+        multiline rows={4} 
         />
-        <Button type="submit">Submit</Button>
+        </FormControl>
+        <Button type="submit" variant='contained'>Submit</Button>
       </Box>
 
 
-      {/* Email List Modal */}
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
-        <Box
-          component="form"
-          onSubmit={handleSubmitModal(onSubmitModal)}
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'white',
-            border: '2px solid black',
-            boxShadow: 24,
-            p: 4
-          }}
-        >
-          <h2>Join Our Email List</h2>
-          <TextField
-            type="email"
-            label="Email Address"
-            name = {modalEmail.name}
-            onchange = {modalEmail.onChange}
-            inputRef={modalEmail.onChange}
-            required
-          />
-          <Button type="submit"onClick={() => setOpenModal(false)} variant='contained'>Join</Button>
-          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
-        </Box>
-      </Modal>
+      
     </div>
 
 
