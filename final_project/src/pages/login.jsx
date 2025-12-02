@@ -10,24 +10,38 @@ export default function Login() {
   const [redirect, setRedirect] = useState(false);
   const {register, handleSubmit} = useForm()
 
- const onSubmit = (data) => {
+ const onSubmit = async (data) => {
     setError('')
 
-    if (data.userName === 'admin' && data.password === '1234') {
-      setRedirect(true) //use Navigate here, but we don't always 
-      //want to navigate, only on successful login rather than using Link
-    }else{
-    alert('Please check your username and password and try again.')
-    setError('Invalid username or password')
+    try {
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password
+        })
+      });
+
+      if (response.ok) {
+        setRedirect(true);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed');
+        alert('Please check your username and password and try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Network error. Please try again.');
+      alert('Login failed. Please try again.');
     }
   }
 
   if (redirect) {
-    return <Navigate to="/employees" /> //use Navigate here, but we don't always 
-      //want to navigate, only on successful login rather than using Link
+    return <Navigate to="/employees" />
   }
 
-  const userName = register('userName', { required: 'User Name is required' })
+  const username = register('username', { required: 'User Name is required' })
   const password = register('password', { required: 'Password is required' })
 
   return(
@@ -49,9 +63,9 @@ export default function Login() {
           <FormLabel>User Name</FormLabel>
           <TextField
             label = "userName"
-            name = {userName.name}
-            onChange = {userName.onChange}
-            inputRef = {userName.ref}
+            name = {username.name}
+            onChange = {username.onChange}
+            inputRef = {username.ref}
           />
         </FormControl>
 
@@ -59,6 +73,7 @@ export default function Login() {
           <FormLabel>Password</FormLabel>
           <TextField
             label = "password"
+            type="password"
             name = {password.name}
             onChange = {password.onChange}
             inputRef = {password.ref}
