@@ -13,7 +13,6 @@ const room = 'rooms'
 
 
 const guestRoutes = (app) => {
-    console.log("printed")
     /**
      * Post /api/booking
      * routes purpose is to establishing which rooms are available that match the type indicated 

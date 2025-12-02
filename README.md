@@ -55,6 +55,7 @@ npm install react-router-dom @mui/material @mui/icons-material react-hook-form
 ### images source
 rooms - [https://www.marriott.com/en-us/hotels/tpays-springhill-suites-clearwater-beach/overview/]
 home page - [https://www.peakpx.com/en/hd-wallpaper-desktop-euzxf], [https://www.agoda.com/holiday-inn-sarasota-lido-beach-at-the-beach/hotel/sarasota-fl-us.html?ds=InUEYK0q5iX6DMuG], [https://reserving.com/hotels/america/united-states/florida/sarasota/sarasota/lido-beach-resort], [https://www.opalcollection.com/zota/stay/]
+npm install react-router-dom @mui/material @emotion/react @emotion/styled react-hook-form @mui/icons-material
 
 
 
