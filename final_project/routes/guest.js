@@ -21,7 +21,7 @@ const guestRoutes = (app) => {
     */
    app.post('/api/booking', async(req,res)=> {
     try{
-        let{name, email, type,check_in, check_out} = req.body; //have to get the guest_id
+        let{name, email,phone,type,check_in, check_out} = req.body; //have to get the guest_id
         const checkInISO = new Date(check_in).toISOString();
         const checkOutISO = new Date(check_out).toISOString();
         //getting the specified type of room requested
@@ -46,8 +46,8 @@ const guestRoutes = (app) => {
        console.log("error here")
         let reserve_query = `
             With guest As(
-                Insert into ${contact} (name,email)
-                select $1,$2::varchar
+                Insert into ${contact} (name,email,phone_number)
+                select $1,$2::varchar,$3::varchar
                 where not exists(
                     select 1 from ${contact} where email=$2::varchar
                 )
@@ -59,11 +59,12 @@ const guestRoutes = (app) => {
                 select guest_id from ${contact} where email = $2::varchar
             )
             Insert into ${reserve}(guest_id ,room_id, status, check_in, check_out)
-            select guest_id, $3,'confirmed',$4,$5
+            select guest_id, $4,'confirmed',$5,$6
             from final_guest
+            returning reservation_num
             `
-        const done = await query(reserve_query,[name,email,roomId,checkInISO, checkOutISO])
-        res.status(201).json({ message: "Booking confirmed", room: randRow.room_num });
+        const done = await query(reserve_query,[name,email,phone,roomId,checkInISO, checkOutISO])
+        res.status(201).json({ message: "Booking confirmed", room: randRow.room_num, reservation_num: done.rows[0].reservation_num });
     }catch(err){
         res.status(500).json({error: 'internal server error'})
     }
