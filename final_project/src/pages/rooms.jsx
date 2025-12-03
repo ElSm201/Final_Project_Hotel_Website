@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import { Modal, Box, TextField, Button } from '@mui/material'
-import { Link, useNavigate} from 'react-router-dom'
+import { Modal, Box, TextField, Button, FormLabel, FormControl } from '@mui/material'
+import {Navigate, Link } from 'react-router-dom'
 import './Style/Room.css'
-import { checkAvailability } from '../api/reservationApi';
+import { useForm } from 'react-hook-form';
 
 export default function Rooms({setBookingSettings}) {
   const [open, setOpen] = useState(false)
   const [selectedRoom, setSelectedRoom] = useState(null)
-  const [checkIn, setCheckIn] = useState('')
-  const [checkOut, setCheckOut] = useState('')
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [redirect, setRedirect] = useState(false);
+
+ 
 
   const { register, handleSubmit } = useForm();
 
@@ -22,7 +21,29 @@ export default function Rooms({setBookingSettings}) {
     {id: 5, name: 'Family Suite', img: '/images/room5.webp', description: 'A large suite perfect for families, with multiple beds and a living area.', price: '$350/night'},
   ];
 
-  
+    const onSubmit = (data) => {
+      const today = new Date()
+      const checkInDate = new Date(data.checkIn)
+      const checkOutDate = new Date(data.checkOut)
+
+      if(checkInDate < today || checkOutDate <= checkInDate){ //check that date is not in the past and check-out is after check-in
+        alert('Please select valid check-in and check-out dates.')
+        return
+      }
+
+      setBookingSettings({
+        roomType: selectedRoom.name,
+        roomPrice: selectedRoom.price,
+        travelDates: { checkIn: data.checkIn, checkOut: data.checkOut },
+     })
+
+      setOpen(false)
+      setRedirect(true) 
+    }
+
+    if(redirect){
+    return <Navigate to="/booking" />//Navigate to booking page
+    }
 
 
 
@@ -31,62 +52,13 @@ export default function Rooms({setBookingSettings}) {
       setOpen(true)
     };
 
-  const handleClose = () => {
-    setOpen(false)
-    setSelectedRoom(null)
-    setCheckIn('')
-    setCheckOut('')
-    setLoading(false)
-  };
+    const handleClose = () => {
+      setOpen(false)
+      setSelectedRoom(null)
+      setCheckIn('')
+      setCheckOut('')
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Basic date validation
-    const today = new Date();
-    const checkInDate = new Date(checkIn);
-    const checkOutDate = new Date(checkOut);
-    
-    if (checkInDate < today) {
-      alert('Check-in date cannot be in the past.');
-      return;
-    }
-    
-    if (checkOutDate <= checkInDate) {
-      alert('Check-out date must be after check-in date.');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      // Check availability with the API
-      const availability = await checkAvailability({
-        roomType: selectedRoom.name,
-        checkIn: checkIn,
-        checkOut: checkOut
-      });
-
-      if (availability.available) {
-        // Room is available - save booking settings and navigate to booking page
-        setBookingSettings({
-          roomType: selectedRoom.name,
-          roomPrice: selectedRoom.price,
-          travelDates: { checkIn, checkOut },
-          roomId: selectedRoom.id
-        });
-        handleClose(); 
-        navigate('/booking'); // Navigate to booking page
-      } else {
-        alert('Sorry, this room is not available for the selected dates. Please choose different dates or another room.');
-      }
-    } catch (error) {
-      console.error('Availability check failed:', error);
-      alert('Error checking availability. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
     const getSelectedName = () => {
     if(selectedRoom){
@@ -144,37 +116,10 @@ export default function Rooms({setBookingSettings}) {
           <TextField type="date" {...register("checkOut", { required: true })} />
           </FormControl>
 
-          <TextField
-            type="date"
-            label="Check-in Date"
-            value={checkIn}
-            onChange={(e) => setCheckIn(e.target.value)}
-            required
-            disabled={loading}
-            />
-
-          <TextField
-            type="date"
-            label="Check-out Date"
-            value={checkOut}
-            onChange={(e) => setCheckOut(e.target.value)}
-            required
-            disabled={loading}
-            />
-          <Button 
-            type="submit" 
-            variant="contained" 
-            disabled={loading}
-          >
-            {loading ? 'Checking Availability...' : 'Continue Booking'}
+          <Button type="submit" variant="contained">
+            Continue Booking
           </Button>
-          
-          <Button 
-            onClick={handleClose} 
-            disabled={loading}
-          >
-            Cancel
-          </Button>
+          <Button onClick={handleClose}>Cancel</Button>
         </Box>
       </Modal>
     </div>
