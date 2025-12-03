@@ -45,7 +45,7 @@ MUI will also be used to help with the visuals of the website
 
 ## Set Up
 ### download 
-
+npm install react-router-dom @mui/material @emotion/react @emotion/styled react-hook-form @mui/icons-material
 
 # Set up 
 

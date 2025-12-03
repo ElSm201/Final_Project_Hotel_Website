@@ -9,7 +9,6 @@ export default function Employees() {
       <ul className="navbar">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/rooms">Book a Room</Link></li>
-        <li><Link to="/reviews">Restaurants Nearby</Link></li>
         <li><Link to="/login">Employee Login</Link></li>
       </ul>
       <div>

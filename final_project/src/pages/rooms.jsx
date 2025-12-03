@@ -12,6 +12,8 @@ export default function Rooms({setBookingSettings}) {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
+  const { register, handleSubmit } = useForm();
+
   const rooms = [
     {id: 1, name: 'Ocean View', img: '/images/room1.avif', description: 'Enjoy a beautiful view of the ocean from your room.', price: '$250/night'},
     {id: 2, name: 'Twin Double', img: '/images/room2.avif', description: 'A spacious room with two twin beds', price: '$200/night'}, //all room images from https://www.marriott.com/en-us/hotels/tpays-springhill-suites-clearwater-beach/overview/
@@ -24,10 +26,10 @@ export default function Rooms({setBookingSettings}) {
 
 
 
-  const handleOpen = (room) => {
-    setSelectedRoom(room)
-    setOpen(true)
-  };
+    const handleOpen = (room) => {
+      setSelectedRoom(room)
+      setOpen(true)
+    };
 
   const handleClose = () => {
     setOpen(false)
@@ -86,19 +88,18 @@ export default function Rooms({setBookingSettings}) {
     }
   };
 
-  const getSelectedName = () => {
-  if(selectedRoom){
-    return selectedRoom.name
+    const getSelectedName = () => {
+    if(selectedRoom){
+      return selectedRoom.name
+      }
+        return "error"
     }
-      return "error"
-  }
 
   return (
     <div className="rooms-page">
       <ul className="navbar">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/rooms">Book a Room</Link></li>
-        <li><Link to="/reviews">Restaurants Nearby</Link></li>
         <li><Link to="/login">Employee Login</Link></li>
       </ul>
       <h1>Available Rooms</h1>
@@ -116,13 +117,16 @@ export default function Rooms({setBookingSettings}) {
       <Modal open={open} onClose={handleClose}>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
+
           sx={{
               position: 'absolute',
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 400,
+              flexDirection: 'column',
+              gap: 2,
               bgcolor: 'white',
               border: '2px solid black',
               boxShadow: 24,
@@ -130,6 +134,15 @@ export default function Rooms({setBookingSettings}) {
           }}
         >
           <h2>{getSelectedName()}</h2>
+          <h3>Choose Your Travel Dates</h3>
+          <FormControl>
+            <FormLabel>Check-In Date</FormLabel>
+          <TextField type="date" {...register("checkIn", { required: true })} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Check-Out Date</FormLabel>
+          <TextField type="date" {...register("checkOut", { required: true })} />
+          </FormControl>
 
           <TextField
             type="date"

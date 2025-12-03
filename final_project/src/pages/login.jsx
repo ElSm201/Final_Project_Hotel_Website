@@ -4,8 +4,6 @@ import { Box, TextField, Button, FormControl, FormLabel} from '@mui/material'
 import {useForm} from 'react-hook-form'
 
 export default function Login() {
-  //const [userName, setUserName] = useState('')
-  //const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [redirect, setRedirect] = useState(false);
   const {register, handleSubmit} = useForm()
@@ -37,12 +35,13 @@ export default function Login() {
     }
   }
 
-  if (redirect) {
-    return <Navigate to="/employees" />
-  }
+  
 
-  const username = register('username', { required: 'User Name is required' })
-  const password = register('password', { required: 'Password is required' })
+  if (redirect) {
+    return <Navigate to="/employees" /> //use Navigate here, but we don't always 
+      //want to navigate, only on successful login rather than using Link
+      //also found from https://ui.dev/react-router-programmatically-navigate
+  }
 
   return(
     <div>
@@ -50,7 +49,6 @@ export default function Login() {
           <ul className="navbar">
             <li><Link to="/">Home</Link></li>
             <li><Link to="/rooms">Book a Room</Link></li>
-            <li><Link to="/reviews">Restaurants Nearby</Link></li>
             <li><Link to="/login">Employee Login</Link></li>
           </ul>
         </div>
@@ -63,9 +61,7 @@ export default function Login() {
           <FormLabel>User Name</FormLabel>
           <TextField
             label = "userName"
-            name = {username.name}
-            onChange = {username.onChange}
-            inputRef = {username.ref}
+            {...register('userName', { required: 'User Name is required' })}
           />
         </FormControl>
 
@@ -74,9 +70,7 @@ export default function Login() {
           <TextField
             label = "password"
             type="password"
-            name = {password.name}
-            onChange = {password.onChange}
-            inputRef = {password.ref}
+            {...register('password', { required: 'Password is required' })}
           />
         </FormControl>
         <Button type="submit" variant="contained">
