@@ -8,15 +8,30 @@ export default function Login() {
   const [redirect, setRedirect] = useState(false);
   const {register, handleSubmit} = useForm()
 
- const onSubmit = (data) => {
+ const onSubmit = async (data) => {
     setError('')
 
-    if (data.userName === 'admin' && data.password === '1234') {
-      setRedirect(true) //use Navigate here, but we don't always 
-      //want to navigate, only on successful login rather than using Link
-    }else{
-    alert('Please check your username and password and try again.')
-    setError('Invalid username or password')
+    try {
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password
+        })
+      });
+
+      if (response.ok) {
+        setRedirect(true);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed');
+        alert('Please check your username and password and try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Network error. Please try again.');
+      alert('Login failed. Please try again.');
     }
   }
 
