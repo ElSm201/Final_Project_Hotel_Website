@@ -68,8 +68,7 @@ Database:
 # Installation & Set up Instructions
 
 ### Install Dependencies
-* npm install react-router-dom @mui/material @mui/icons-material react-hook-form bcryptjs 
-* npm install cors
+* run npm install 
 
 ### Create a .env File
 * Add the database URL to the .env file
